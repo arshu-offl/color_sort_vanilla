@@ -96,8 +96,10 @@ function checkFinishedBottles(){
 
         let finished = true;
         if(finishedBottles.find((elem) => elem === i)) continue;
-        let firstColor = gameState[i]["colors"][0];
-        for(let j = 1; j < levels; j++)
+        let [firstColor, firstColorIdx] = getTop(i);
+        if(firstColor === -1) continue;
+
+        for(let j = firstColorIdx + 1; j < levels; j++)
             if(gameState[i]["colors"][j] === -1 || firstColor !== gameState[i]["colors"][j]){
                 finished = false;
                 break;
