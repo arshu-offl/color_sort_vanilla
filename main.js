@@ -92,10 +92,10 @@ function isAllowedMove(x, y){
 
 function checkFinishedBottles(){
 
+    finishedBottles.length = 0;
     for(let i = 0; i < bottles; i++){
 
         let finished = true;
-        if(finishedBottles.find((elem) => elem === i)) continue;
         let [firstColor, firstColorIdx] = getTop(i);
         if(firstColor === -1) continue;
 
