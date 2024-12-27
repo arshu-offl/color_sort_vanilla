@@ -70,10 +70,27 @@ function initializeBottleHandlers(){
 // Check the topmost color in a bottle x
 function getTop(x){
 
-    for(let i = 0; i < levels; i++)
-        if(gameState[x]["colors"][i] !== -1) return [gameState[x]["colors"][i], i];
+    for(let i = 0; i < levels; i++){
+        if(gameState[x]["colors"][i] !== -1){
+            return [gameState[x]["colors"][i], i];
+        }
+    }
 
     return [-1, levels - 1];
+}
+
+function getTopDepth(x){
+
+    const [firstColor, firstColorIdx] = getTop(x);
+
+    let Xdepth = 0;
+    for(let i = firstColorIdx; i < levels; i++)
+        if(gameState[x]["colors"][i] === firstColor)
+            Xdepth++;
+        else
+            break;
+    
+    return Xdepth;
 }
 
 
@@ -85,6 +102,11 @@ function isAllowedMove(x, y){
     // Get top of x
     const [topX, Xidx] = getTop(x);
     const [topY, Yidx] = getTop(y);
+
+    // Free space in Y should be > depth of top color in X
+    const freeSpaceY = Yidx;
+    const depthX = getTopDepth(x);
+    if(freeSpaceY < depthX) return false;
 
     // X bottle should not be empty & Y bottle should either be empty on top or match the X bottle color (Y should have empty space as well)
     return (topX !== -1) && ( ((topX === topY) && (Yidx !== 0)) || topY === -1);
@@ -119,12 +141,21 @@ function moveColors(x, y){
     let [topX, Xidx] = getTop(x);
     let [topY, Yidx] = getTop(y);
 
-    gameState[x]["colors"][Xidx] = -1;
-    if(topY !== -1) Yidx--;
-    gameState[y]["colors"][Yidx] = topX;
+    // Top depth in X
+    const depthX = getTopDepth(x);
 
-    checkFinishedBottles();
+    console.log([topX, Xidx, depthX])
+    console.log([topY, Yidx])
+
+    for(let i = Xidx; i < Xidx + depthX; i++)
+        gameState[x]["colors"][i] = -1;
+
+    if(topY !== -1) Yidx--;
+    for(let i = Yidx; i > Yidx - depthX; i--)
+        gameState[y]["colors"][i] = topX;
+
     refreshGameState();
+    checkFinishedBottles();
 }
 
 function handleGameAction(bottle){
