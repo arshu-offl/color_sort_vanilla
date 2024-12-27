@@ -96,19 +96,19 @@ function checkFinishedBottles(){
     for(let i = 0; i < bottles; i++){
 
         let finished = true;
-        let [firstColor, firstColorIdx] = getTop(i);
-        if(firstColor === -1) continue;
-
-        for(let j = firstColorIdx + 1; j < levels; j++)
-            if(gameState[i]["colors"][j] === -1 || firstColor !== gameState[i]["colors"][j]){
+        let firstColor = gameState[i]["colors"][0];
+        
+        for(let j = 1; j < levels; j++){
+            if(firstColor !== gameState[i]["colors"][j]){
                 finished = false;
                 break;
             }
+        }
         
         if(finished) finishedBottles.push(i);
     }
 
-    if(finishedBottles.length === bottles - 2){
+    if(finishedBottles.length === bottles){
         alert("Congratsssssppppp!");
         location.reload();
     }
@@ -177,8 +177,8 @@ window.onload = () => {
     createRandomPuzzle();
     refreshGameState();
 
-    document.getElementById("randomize_btn").addEventListener('click', () => {
-        createRandomPuzzle();
-        refreshGameState();
-    });
+    // document.getElementById("randomize_btn").addEventListener('click', () => {
+    //     createRandomPuzzle();
+    //     refreshGameState();
+    // });
 }
