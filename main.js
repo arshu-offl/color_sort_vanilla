@@ -131,7 +131,7 @@ function checkFinishedBottles(){
     }
 
     if(finishedBottles.length === bottles){
-        alert("Congratsssssppppp!");
+        alert("Congrats sir!");
         location.reload();
     }
 }
@@ -212,4 +212,5 @@ window.onload = () => {
     //     createRandomPuzzle();
     //     refreshGameState();
     // });
+
 }
